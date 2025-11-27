@@ -1,0 +1,15 @@
+{
+  "name": "techtribe",
+  "version": "1.0.0",
+  "description": "Developers Community",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "NodeJs",
+    "React"
+  ],
+  "author": "Niraj Singh",
+  "license": "ISC"
+}
