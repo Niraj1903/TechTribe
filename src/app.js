@@ -18,6 +18,22 @@ app.post("/signUp", async (req, res) => {
   }
 });
 
+//feed API
+
+app.get("/feed", async (req, res) => {
+  try {
+    const user = await User.find({});
+    if (user.length === 0) {
+      res.status(404).send("cannot find");
+    } else {
+      res.send(user);
+    }
+  } catch (err) {
+    res.status(400).send("cannot find the user Email" + err.status);
+  }
+});
+
+//connection to DB logic
 connectDatabase()
   .then(() => {
     app.listen(3000, () => {
