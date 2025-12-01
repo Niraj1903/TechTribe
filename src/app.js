@@ -18,6 +18,22 @@ app.post("/signUp", async (req, res) => {
   }
 });
 
+//Get User by Email
+
+app.get("/user", async (req, res) => {
+  const user = req.body.emailId;
+  try {
+    const userByEmail = await User.find({ emailId: user });
+    if (userByEmail.length === 0) {
+      res.status(404).send("Cannot Find Email");
+    } else {
+      res.send(userByEmail);
+    }
+  } catch (err) {
+    res.status(400).send("Cannot find your search" + err.status);
+  }
+});
+
 //feed API
 
 app.get("/feed", async (req, res) => {
