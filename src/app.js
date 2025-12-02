@@ -6,7 +6,7 @@ const { User } = require("./models/user");
 
 const { connectDatabase } = require("./config/database");
 
-app.use(express.json());
+app.use(express.json()); // this is middleware for reading json file & convets to js Object & add js object back to request obj in the body
 
 app.post("/signUp", async (req, res) => {
   const user = new User(req.body);
@@ -46,6 +46,18 @@ app.get("/feed", async (req, res) => {
     }
   } catch (err) {
     res.status(400).send("cannot find the user Email" + err.status);
+  }
+});
+
+//Delete User
+
+app.delete("/user", async (req, res) => {
+  const userId = req.body.userId;
+  try {
+    const user = await User.findOneAndDelete(userId);
+    res.send("User Deleted");
+  } catch (err) {
+    res.status(400).send("Data canot be deleted" + err);
   }
 });
 
