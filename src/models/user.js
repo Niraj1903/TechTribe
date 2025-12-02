@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const userSchema = mongoose.Schema({
   firstName: {
     type: String,
+    required: true,
   },
   lastName: {
     type: String,
@@ -15,9 +16,22 @@ const userSchema = mongoose.Schema({
   },
   emailId: {
     type: String,
+    unique: true,
+    lowercase: true,
+    trim: true,
   },
   password: {
     type: String,
+  },
+  about: {
+    type: String,
+    default: "Plese write about your self ",
+  },
+  photURL: {
+    type: String,
+  },
+  skills: {
+    type: [String],
   },
 });
 
