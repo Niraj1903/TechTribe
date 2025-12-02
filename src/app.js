@@ -61,6 +61,20 @@ app.delete("/user", async (req, res) => {
   }
 });
 
+// Update Data of a user
+
+app.patch("/user", async (req, res) => {
+  const data = req.body;
+  const userId = req.body.userId;
+
+  try {
+    await User.findOneAndUpdate(userId, data);
+    res.send("update sucess");
+  } catch (err) {
+    res.status(400).send("Update failed");
+  }
+});
+
 //connection to DB logic
 connectDatabase()
   .then(() => {
