@@ -68,7 +68,10 @@ app.patch("/user", async (req, res) => {
   const userId = req.body.userId;
 
   try {
-    await User.findOneAndUpdate(userId, data);
+    const user = await User.findOneAndUpdate(userId, data, {
+      returnDocument: "after",
+    });
+    console.log(user);
     res.send("update sucess");
   } catch (err) {
     res.status(400).send("Update failed");
