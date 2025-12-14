@@ -1,4 +1,5 @@
 const express = require("express"); // this is getting express from node modules
+const validator = require("validator");
 
 const app = express(); // this is calling express js application / instance of express js application
 require("./config/database");
@@ -14,7 +15,7 @@ app.post("/signUp", async (req, res) => {
     await user.save();
     res.send("user data sucessfully added");
   } catch (err) {
-    res.status(400).send("request failed" + err.status);
+    res.status(400).send("request failed " + err.message);
   }
 });
 
