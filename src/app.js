@@ -1,6 +1,7 @@
 const express = require("express"); // this is getting express from node modules
 const validator = require("validator");
 const { validateSignupData } = require("./utils/validation");
+const bcrypt = require("bcrypt");
 
 const app = express(); // this is calling express js application / instance of express js application
 require("./config/database");
@@ -11,9 +12,17 @@ const { connectDatabase } = require("./config/database");
 app.use(express.json()); // this is middleware for reading json file & convets to js Object & add js object back to request obj in the body
 
 app.post("/signUp", async (req, res) => {
-  const user = new User(req.body);
   try {
+    const { firstName, lastName, emailId, password } = req.body;
     validateSignupData(req);
+
+    const passwordHash = await bcrypt.hash(password, 10);
+    const user = new User({
+      firstName,
+      lastName,
+      emailId,
+      password: passwordHash,
+    });
     await user.save();
     res.send("user data sucessfully added");
   } catch (err) {
