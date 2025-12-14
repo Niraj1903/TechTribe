@@ -11,7 +11,7 @@ const userSchema = mongoose.Schema(
     lastName: {
       type: String,
     },
-    Gender: {
+    gender: {
       type: String,
       validate(value) {
         if (!["m", "f", "male", "female", "others"].includes(value)) {
@@ -23,7 +23,7 @@ const userSchema = mongoose.Schema(
       type: Number,
       min: 18,
     },
-    email: {
+    emailId: {
       type: String,
       unique: true,
       lowercase: true,

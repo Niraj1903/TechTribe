@@ -1,5 +1,6 @@
 const express = require("express"); // this is getting express from node modules
 const validator = require("validator");
+const { validateSignupData } = require("./utils/validation");
 
 const app = express(); // this is calling express js application / instance of express js application
 require("./config/database");
@@ -12,10 +13,11 @@ app.use(express.json()); // this is middleware for reading json file & convets t
 app.post("/signUp", async (req, res) => {
   const user = new User(req.body);
   try {
+    validateSignupData(req);
     await user.save();
     res.send("user data sucessfully added");
   } catch (err) {
-    res.status(400).send("request failed " + err.message);
+    res.status(400).send("Error : " + err.message);
   }
 });
 
@@ -31,7 +33,7 @@ app.get("/user", async (req, res) => {
       res.send(userByEmail);
     }
   } catch (err) {
-    res.status(400).send("Cannot find your search" + err.status);
+    res.status(400).send("Error : " + err.message);
   }
 });
 
@@ -46,7 +48,7 @@ app.get("/feed", async (req, res) => {
       res.send(user);
     }
   } catch (err) {
-    res.status(400).send("cannot find the user Email" + err.status);
+    res.status(400).send("Error : " + err.message);
   }
 });
 
@@ -58,7 +60,7 @@ app.delete("/user", async (req, res) => {
     const user = await User.findOneAndDelete(userId);
     res.send("User Deleted");
   } catch (err) {
-    res.status(400).send("Data canot be deleted" + err);
+    res.status(400).send("Error : " + err.message);
   }
 });
 
@@ -75,7 +77,7 @@ app.patch("/user", async (req, res) => {
     console.log(user);
     res.send("update sucess");
   } catch (err) {
-    res.status(400).send("Update failed");
+    res.status(400).send("Error : " + err.message);
   }
 });
 
