@@ -11,6 +11,8 @@ const { connectDatabase } = require("./config/database");
 
 app.use(express.json()); // this is middleware for reading json file & convets to js Object & add js object back to request obj in the body
 
+//SignUp API
+
 app.post("/signUp", async (req, res) => {
   try {
     const { firstName, lastName, emailId, password } = req.body;
@@ -25,6 +27,27 @@ app.post("/signUp", async (req, res) => {
     });
     await user.save();
     res.send("user data sucessfully added");
+  } catch (err) {
+    res.status(400).send("Error : " + err.message);
+  }
+});
+
+//LOGIN API
+
+app.post("/login", async (req, res) => {
+  try {
+    const { emailId, password } = req.body;
+    const user = await User.findOne({ emailId: emailId });
+    if (!user) {
+      throw new Error("Invalid Credentails");
+    }
+
+    const validPassord = await bcrypt.compare(password, user.password);
+    if (!validPassord) {
+      throw new Error("Invalid Credentails");
+    } else {
+      res.send("Login successful");
+    }
   } catch (err) {
     res.status(400).send("Error : " + err.message);
   }
