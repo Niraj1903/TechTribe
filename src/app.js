@@ -2,6 +2,7 @@ const express = require("express"); // this is getting express from node modules
 const validator = require("validator");
 const { validateSignupData } = require("./utils/validation");
 const bcrypt = require("bcrypt");
+const cookierParser = require("cookie-parser");
 
 const app = express(); // this is calling express js application / instance of express js application
 require("./config/database");
@@ -10,7 +11,7 @@ const { User } = require("./models/user");
 const { connectDatabase } = require("./config/database");
 
 app.use(express.json()); // this is middleware for reading json file & convets to js Object & add js object back to request obj in the body
-
+app.use(cookierParser());
 //SignUp API
 
 app.post("/signUp", async (req, res) => {
@@ -109,6 +110,18 @@ app.patch("/user", async (req, res) => {
     });
     console.log(user);
     res.send("update sucess");
+  } catch (err) {
+    res.status(400).send("Error : " + err.message);
+  }
+});
+
+//Profile API
+
+app.get("/profile", async (req, res) => {
+  try {
+    const cookies = req.cookies;
+    console.log(cookies);
+    res.send("Cookies send successfully.");
   } catch (err) {
     res.status(400).send("Error : " + err.message);
   }
