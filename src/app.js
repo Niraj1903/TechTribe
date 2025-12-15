@@ -36,6 +36,7 @@ app.post("/signUp", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   try {
+    res.cookie("test1", "Test");
     const { emailId, password } = req.body;
     const user = await User.findOne({ emailId: emailId });
     if (!user) {
