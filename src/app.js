@@ -123,8 +123,18 @@ app.patch("/user", async (req, res) => {
 app.get("/profile", async (req, res) => {
   try {
     const cookies = req.cookies;
+    const { token } = cookies;
+    if (!token) return "Invalid Token";
+    const isValidToken = await jwt.verify(token, "Tiger@Lion");
+    const { _id } = isValidToken;
+    const user = await User.findById(_id);
+    if (!user) {
+      throw new Error("Not a valid User");
+    }
+    console.log("Login with UserId : " + _id);
+
     console.log(cookies);
-    res.send("Cookies send successfully.");
+    res.send(user);
   } catch (err) {
     res.status(400).send("Error : " + err.message);
   }
