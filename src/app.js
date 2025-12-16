@@ -3,6 +3,7 @@ const validator = require("validator");
 const { validateSignupData } = require("./utils/validation");
 const bcrypt = require("bcrypt");
 const cookierParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 
 const app = express(); // this is calling express js application / instance of express js application
 require("./config/database");
@@ -37,9 +38,11 @@ app.post("/signUp", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   try {
-    res.cookie("test1", "Test");
     const { emailId, password } = req.body;
     const user = await User.findOne({ emailId: emailId });
+    const token = await jwt.sign({ _id: user._id }, "Tiger@Lion");
+    res.cookie("token", token);
+
     if (!user) {
       throw new Error("Invalid Credentails");
     }
