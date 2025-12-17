@@ -4,6 +4,7 @@ const { validateSignupData } = require("./utils/validation");
 const bcrypt = require("bcrypt");
 const cookierParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
+const { userAuth } = require("./middlewares/auth");
 
 const app = express(); // this is calling express js application / instance of express js application
 require("./config/database");
@@ -120,20 +121,9 @@ app.patch("/user", async (req, res) => {
 
 //Profile API
 
-app.get("/profile", async (req, res) => {
+app.get("/profile", userAuth, async (req, res) => {
   try {
-    const cookies = req.cookies;
-    const { token } = cookies;
-    if (!token) return "Invalid Token";
-    const isValidToken = await jwt.verify(token, "Tiger@Lion");
-    const { _id } = isValidToken;
-    const user = await User.findById(_id);
-    if (!user) {
-      throw new Error("Not a valid User");
-    }
-    console.log("Login with UserId : " + _id);
-
-    console.log(cookies);
+    const user = req.user;
     res.send(user);
   } catch (err) {
     res.status(400).send("Error : " + err.message);

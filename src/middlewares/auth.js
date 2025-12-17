@@ -1,12 +1,27 @@
-// const auth = "XYZ";
+const jwt = require("jsonwebtoken");
+const { User } = require("../models/user");
 
-// const login = (req, res, next) => {
-//   const token = auth === "XYZ";
-//   if (!token) {
-//     res.status(401).send("Error 401");
-//   } else {
-//     next();
-//   }
-// };
+const userAuth = async (req, res, next) => {
+  try {
+    const cookies = req.cookies;
+    const { token } = cookies;
+    if (!token) {
+      throw new Error("Invalid Token !!!");
+    }
 
-// module.exports = { login };
+    const decodedData = await jwt.verify(token, "Tiger@Lion");
+    const { _id } = decodedData;
+
+    const user = await User.findById(_id);
+    if (!user) {
+      throw new Error("User Not Found");
+    }
+
+    req.user = user;
+    next();
+  } catch (err) {
+    res.status(400).send("Error : " + err.message);
+  }
+};
+
+module.exports = { userAuth };
