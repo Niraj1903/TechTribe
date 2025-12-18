@@ -41,7 +41,7 @@ app.post("/login", async (req, res) => {
   try {
     const { emailId, password } = req.body;
     const user = await User.findOne({ emailId: emailId });
-    const token = await jwt.sign({ _id: user._id }, "Tiger@Lion");
+    const token = await user.getJWT();
     res.cookie("token", token);
 
     if (!user) {
@@ -54,66 +54,6 @@ app.post("/login", async (req, res) => {
     } else {
       res.send("Login successful");
     }
-  } catch (err) {
-    res.status(400).send("Error : " + err.message);
-  }
-});
-
-//Get User by Email
-
-app.get("/user", async (req, res) => {
-  const user = req.body.emailId;
-  try {
-    const userByEmail = await User.find({ emailId: user });
-    if (userByEmail.length === 0) {
-      res.status(404).send("Cannot Find Email");
-    } else {
-      res.send(userByEmail);
-    }
-  } catch (err) {
-    res.status(400).send("Error : " + err.message);
-  }
-});
-
-//feed API
-
-app.get("/feed", async (req, res) => {
-  try {
-    const user = await User.find({});
-    if (user.length === 0) {
-      res.status(404).send("cannot find");
-    } else {
-      res.send(user);
-    }
-  } catch (err) {
-    res.status(400).send("Error : " + err.message);
-  }
-});
-
-//Delete User
-
-app.delete("/user", async (req, res) => {
-  const userId = req.body.userId;
-  try {
-    const user = await User.findOneAndDelete(userId);
-    res.send("User Deleted");
-  } catch (err) {
-    res.status(400).send("Error : " + err.message);
-  }
-});
-
-// Update Data of a user
-
-app.patch("/user", async (req, res) => {
-  const data = req.body;
-  const userId = req.body.userId;
-
-  try {
-    const user = await User.findOneAndUpdate(userId, data, {
-      returnDocument: "after",
-    });
-    console.log(user);
-    res.send("update sucess");
   } catch (err) {
     res.status(400).send("Error : " + err.message);
   }
