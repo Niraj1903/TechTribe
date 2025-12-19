@@ -64,10 +64,5 @@ userSchema.methods.getJWT = async function () {
   return token;
 };
 
-userSchema.methods.validToken = async function () {
-  const user = this
-
-  const 
-}
 const User = mongoose.model("User", userSchema);
-module.exports = { User };
+module.exports = User;
