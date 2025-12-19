@@ -23,7 +23,7 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
     Object.keys(req.body).forEach((i) => (loggedInUser[i] = req.body[i]));
     await loggedInUser.save();
     res.json({
-      message: `${loggedInUser.firstName} Ypur Profile is Updated successfully`,
+      message: `${loggedInUser.firstName} Your Profile is Updated successfully`,
       data: loggedInUser,
     });
   } catch (err) {
