@@ -49,7 +49,8 @@ requestRouter.post(
       const data = await friendRequest.save();
 
       res.json({
-        message: "Connection Request send successfully",
+        message:
+          req.user.firstName + " is " + status + " in " + toUser.firstName,
         data,
       });
     } catch (err) {
